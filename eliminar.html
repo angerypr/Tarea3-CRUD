@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Eliminar Usuario</title>
+</head>
+<body>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const index = parseInt(params.get("index"));
+
+    if (!isNaN(index)) {
+      const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+
+      if (index >= 0 && index < usuarios.length) {
+        usuarios.splice(index, 1); 
+        localStorage.setItem("usuarios", JSON.stringify(usuarios));
+      }
+    }
+
+    window.location.href = "ver_usuarios.html";
+  </script>
+</body>
+</html>
