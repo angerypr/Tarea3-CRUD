@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card p-4 shadow" style="min-width: 350px;">
+        <h3 class="text-center mb-4">Registrar Usuario</h3>
+        <form id="formRegistro">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo electrónico</label>
+                <input type="email" class="form-control" id="correo" name="correo" required>
+            </div>
+            <div class="mb-3">
+                <label for="clave" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="clave" name="clave" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Crear Usuario</button>
+            </div>
+        </form>
+        <div id="mensaje" class="mt-3 text-center text-success"></div>
+    </div>
+
+    <script>
+document.getElementById("formRegistro").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+    const correo = document.getElementById("correo").value;
+    const clave = document.getElementById("clave").value;
+
+    const payload = {
+        action: "register",
+        nombre,
+        correo,
+        clave
+    };
+
+    const url = "https://script.google.com/macros/s/AKfycbz-0uRlSd15FcSSK0Yokx8opQumhhJH9PTQ2_coIBO7fHHxEnEXcS64jl8sTm-67Up9/exec";
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const resultado = await response.json();
+        const mensajeDiv = document.getElementById("mensaje");
+
+        if (resultado.result === "success") {
+            mensajeDiv.classList.remove("text-danger");
+            mensajeDiv.classList.add("text-success");
+            mensajeDiv.innerText = resultado.message;
+            document.getElementById("formRegistro").reset();
+        } else {
+            mensajeDiv.classList.remove("text-success");
+            mensajeDiv.classList.add("text-danger");
+            mensajeDiv.innerText = resultado.message || "Error al registrar el usuario.";
+        }
+    } catch (error) {
+        document.getElementById("mensaje").innerText = "Error de conexión.";
+        console.error(error);
+    }
+});
+</script>
+
+</body>
+</html>
